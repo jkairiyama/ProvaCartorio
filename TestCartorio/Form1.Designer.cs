@@ -36,6 +36,9 @@
             button6 = new Button();
             label1 = new Label();
             dataGridView1 = new DataGridView();
+            button7 = new Button();
+            button8 = new Button();
+            button9 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -113,17 +116,50 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(299, 140);
+            dataGridView1.Location = new Point(481, 53);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.Size = new Size(240, 150);
             dataGridView1.TabIndex = 7;
+            // 
+            // button7
+            // 
+            button7.Location = new Point(61, 258);
+            button7.Name = "button7";
+            button7.Size = new Size(133, 23);
+            button7.TabIndex = 8;
+            button7.Text = "Remove Cliente";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
+            // button8
+            // 
+            button8.Location = new Point(61, 287);
+            button8.Name = "button8";
+            button8.Size = new Size(162, 23);
+            button8.TabIndex = 9;
+            button8.Text = "Buscar Cliente por Nome";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
+            // button9
+            // 
+            button9.Location = new Point(353, 258);
+            button9.Name = "button9";
+            button9.Size = new Size(162, 23);
+            button9.TabIndex = 10;
+            button9.Text = "Produto Novo";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(982, 450);
+            Controls.Add(button9);
+            Controls.Add(button8);
+            Controls.Add(button7);
             Controls.Add(dataGridView1);
             Controls.Add(label1);
             Controls.Add(button6);
@@ -149,5 +185,8 @@
         private Button button6;
         private Label label1;
         private DataGridView dataGridView1;
+        private Button button7;
+        private Button button8;
+        private Button button9;
     }
 }

@@ -4,10 +4,9 @@ using Domain.Data.Vendas;
 using Domain.Logic.Clientes;
 using Domain.Logic.Produtos;
 using Domain.Logic.Vendas;
-using Domain.Data.Vendas.Entities;
-using Contracts.ViewModels.Produtos;
 using MediatR;
 using AppCartorio.Clientes;
+using AppCartorio.Produtos;
 using MapsterMapper;
 
 //using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -117,5 +116,31 @@ namespace TestCartorio
             }
         }
 
+        private async void button7_Click(object sender, EventArgs e)
+        {
+            var r = new RemoveClienteCommand(ClienteId: 2);
+
+            await _mediator.Send(r);
+        }
+
+        private async void button8_Click(object sender, EventArgs e)
+        {
+            var c = new GetClienteByNomeQuery(Nome: "Frid");
+
+            var c_list = await _mediator.Send(c);
+
+            dataGridView1.DataSource = c_list;
+
+        }
+
+        private async void button9_Click(object sender, EventArgs e)
+        {
+            var p = new CreateProdutoCommand(Nome: "Alicate", Descricao: "Tramontina Medium", Preco: 35.0M, Estoque: 8);
+
+            var prod = await _mediator.Send(p);
+
+            label1.Text = prod?.Nome ?? "Alicate";
+
+        }
     }
 }
