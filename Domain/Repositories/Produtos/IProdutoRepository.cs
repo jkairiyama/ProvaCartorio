@@ -1,11 +1,11 @@
 using Domain.Data.Produtos;
 
 
-namespace Domain.Logic.Produtos;
+namespace Domain.Repositories.Produtos;
 
 public interface IProdutoRepository
 {
-    void Save();
+    Task Save();
     Task Create(Produto produto);
 
     void Remove(Produto produto);
@@ -16,7 +16,7 @@ public interface IProdutoRepository
 
     Task<Produto?> Get(int produtoId);
 
-    Task<Produto?> GetByNome(string nome);
+    Task<ICollection<Produto>> GetByNome(string nome);
 
 
 }

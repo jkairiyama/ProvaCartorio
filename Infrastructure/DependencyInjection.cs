@@ -1,6 +1,6 @@
-using Domain.Logic.Clientes;
-using Domain.Logic.Produtos;
-using Domain.Logic.Vendas;
+using Domain.Repositories.Clientes;
+using Domain.Repositories.Produtos;
+using Domain.Repositories.Vendas;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IClienteRepository, ClienteRepository>();
         services.AddScoped<IProdutoRepository, ProdutoRepository>();
         services.AddScoped<IVendaRepository, VendaRepository>();
+        services.AddScoped<IVendaItemRepository, VendaItemRepository>();
 
 
 

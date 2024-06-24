@@ -1,6 +1,6 @@
 using Domain.Data.Clientes;
 using MediatR;
-using Domain.Logic.Clientes;
+using Domain.Repositories.Clientes;
 
 namespace AppCartorio.Clientes;
 

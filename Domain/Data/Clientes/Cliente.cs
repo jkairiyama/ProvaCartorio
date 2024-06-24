@@ -1,7 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-using Domain.Data.Vendas;
-using Domain.Logic.Clientes;
 
 namespace Domain.Data.Clientes;
 

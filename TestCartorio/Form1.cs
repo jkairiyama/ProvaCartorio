@@ -1,9 +1,9 @@
 using Domain.Data.Clientes;
 using Domain.Data.Produtos;
 using Domain.Data.Vendas;
-using Domain.Logic.Clientes;
-using Domain.Logic.Produtos;
-using Domain.Logic.Vendas;
+using Domain.Repositories.Clientes;
+using Domain.Repositories.Produtos;
+using Domain.Repositories.Vendas;
 using MediatR;
 using AppCartorio.Clientes;
 using AppCartorio.Produtos;
@@ -51,14 +51,17 @@ namespace TestCartorio
         {
             //Update cliente
             var cli = await _clienteRepository.Get(101);
-            cli
-                .SetNome("Cesar Milei")
+            if (cli is not null)
+            {
+                cli
+                .SetNome("Javier Milei")
                 .SetEndereco("balcarce 50")
                 .SetTelefone("11 9911 111")
                 .SetEmail("cm@gmail.com");
 
-            _clienteRepository.Update(cli);
-            _clienteRepository.Save();
+                _clienteRepository.Update(cli);
+                await _clienteRepository.Save();
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -91,7 +94,7 @@ namespace TestCartorio
             v.AddItem(produtoId: 2, qnty: 32, preco: 0.16M);
             v.AddItem(produtoId: 1, qnty: 15, preco: 0.20M);
 
-            _vendaRepository.Save();
+            await _vendaRepository.Save();
         }
 
         private async void button5_Click(object sender, EventArgs e)
@@ -101,7 +104,7 @@ namespace TestCartorio
             var v = await _vendaRepository.Get(vendaId);
 
             v?.AddItem(3, 1, 34M);
-            _clienteRepository.Save();
+            await _clienteRepository.Save();
         }
 
         private async void button6_Click(object sender, EventArgs e)

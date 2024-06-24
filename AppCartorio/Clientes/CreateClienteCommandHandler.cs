@@ -1,6 +1,6 @@
 using Domain.Data.Clientes;
 using MediatR;
-using Domain.Logic.Clientes;
+using Domain.Repositories.Clientes;
 
 namespace AppCartorio.Clientes;
 
@@ -23,7 +23,7 @@ public class CreateClienteCommandHandler : IRequestHandler<CreateClienteCommand,
             );
 
         await _clienteRepository.Create(cli);
-        _clienteRepository.Save();
+        await _clienteRepository.Save();
 
         return cli;
     }

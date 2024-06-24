@@ -2,11 +2,11 @@ using System;
 using Domain.Data.Clientes;
 using Domain.Data.Vendas;
 
-namespace Domain.Logic.Clientes;
+namespace Domain.Repositories.Clientes;
 
 public interface IClienteRepository
 {
-    void Save();
+    Task Save();
     Task Create(Cliente cliente);
 
     void Remove(Cliente cliente);

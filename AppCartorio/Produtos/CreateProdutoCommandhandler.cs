@@ -1,6 +1,6 @@
 using Domain.Data.Produtos;
 using MediatR;
-using Domain.Logic.Produtos;
+using Domain.Repositories.Produtos;
 
 namespace AppCartorio.Produtos;
 
@@ -23,7 +23,7 @@ public class CreateProdutoCommandHandler : IRequestHandler<CreateProdutoCommand,
             );
 
         await _produtoRepository.Create(prod);
-        _produtoRepository.Save();
+        await _produtoRepository.Save();
 
         return prod;
     }

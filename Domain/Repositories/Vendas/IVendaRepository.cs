@@ -2,12 +2,14 @@ using Domain.Data.Vendas;
 using Domain.Data.Vendas.Entities;
 
 
-namespace Domain.Logic.Vendas;
+namespace Domain.Repositories.Vendas;
 
 public interface IVendaRepository
 {
-    void Save();
+    Task Save();
     Task<Venda> Create(int ClienteId, DateTime data);
+
+    Task<Venda> Create(Venda venda);
 
     void Remove(Venda venda);
 
@@ -22,6 +24,8 @@ public interface IVendaRepository
         int produtoId,
         int qnty,
         decimal preco);
+
+    Task UpdateItem(VendaItem item);
 
     Task<ICollection<Venda>?> GetBydata(DateTime dataVenda);
 

@@ -1,13 +1,8 @@
-using Domain.Data.Clientes;
 using Domain.Data.Vendas;
-using Domain.Logic.Clientes;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Domain.Logic.Vendas;
+using Domain.Repositories.Vendas;
 using Domain.Data.Vendas.Entities;
-using Contracts.ViewModels.Vendas;
-using Contracts.ViewModels.Clientes;
-using Domain.Data.Produtos;
 
 namespace Infrastructure.Repositories;
 
@@ -34,6 +29,15 @@ public class VendaRepository : IVendaRepository
         v?.AddItem(produtoId, qnty, preco);
     }
 
+    public async Task UpdateItem(VendaItem item)
+    {
+        var v = await dbSet
+            .Include(v => v.Items)
+            .Where(v => v.VendaId == item.VendaId)
+            .FirstOrDefaultAsync();
+
+    }
+
     public async Task<Venda> Create(int clienteId, DateTime data)
     {
         var v = new Venda(clienteId, data);
@@ -42,6 +46,15 @@ public class VendaRepository : IVendaRepository
 
         return v;
     }
+
+    public async Task<Venda> Create(Venda venda)
+    {
+        await dbSet.AddAsync(venda);
+
+        return venda;
+    }
+
+
 
     public async Task<Venda?> Get(int vendaId)
     {
@@ -72,21 +85,30 @@ public class VendaRepository : IVendaRepository
 
     public void Remove(Venda venda)
     {
-        throw new NotImplementedException();
+        if (_dbContext.Entry(venda).State == EntityState.Detached)
+        {
+            dbSet.Attach(venda);
+        }
+        dbSet.Remove(venda);
     }
 
-    public Task Remove(int vendaId)
+    public async Task Remove(int vendaId)
     {
-        throw new NotImplementedException();
+        Venda? venda = await dbSet.FindAsync(vendaId);
+        if (venda is not null)
+        {
+            Remove(venda);
+        }
     }
 
-    public void Save()
+    public async Task Save()
     {
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 
     public void Update(Venda venda)
     {
-        throw new NotImplementedException();
+        dbSet.Attach(venda);
+        _dbContext.Entry(venda).State = EntityState.Modified;
     }
 }

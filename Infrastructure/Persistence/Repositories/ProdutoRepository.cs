@@ -1,6 +1,6 @@
 using Domain.Data.Produtos;
 using Domain.Data.Vendas;
-using Domain.Logic.Produtos;
+using Domain.Repositories.Produtos;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +17,9 @@ public class ProdutoRepository : IProdutoRepository
         dbSet = dbContext.Produtos;
     }
 
-    public void Save()
+    public async Task Save()
     {
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
     public async Task Create(Produto produto)
     {
@@ -40,17 +40,11 @@ public class ProdutoRepository : IProdutoRepository
         return cli;
     }
 
-    public async Task<Produto?> GetByNome(string nome)
+    public async Task<ICollection<Produto>> GetByNome(string nome)
     {
-        var cli = await dbSet
+        return await dbSet
             .Where(cli => cli.Nome.StartsWith(nome))
-            .FirstOrDefaultAsync();
-
-        if (cli is not null)
-        {
-            _dbContext.Entry(cli).State = EntityState.Detached;
-        }
-        return cli;
+            .ToListAsync();
     }
 
 

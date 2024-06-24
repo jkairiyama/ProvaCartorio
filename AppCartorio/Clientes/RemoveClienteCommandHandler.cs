@@ -1,7 +1,7 @@
 using Domain.Data.Clientes;
 using MediatR;
-using Domain.Logic.Clientes;
-using Domain.Logic.Vendas;
+using Domain.Repositories.Clientes;
+using Domain.Repositories.Vendas;
 
 namespace AppCartorio.Clientes;
 
@@ -36,7 +36,7 @@ public class RemoveClienteCommandHandler : IRequestHandler<RemoveClienteCommand,
 
         _clienteRepository.Remove(cli);
 
-        _clienteRepository.Save();
+        await _clienteRepository.Save();
 
         return Unit.Value;
     }

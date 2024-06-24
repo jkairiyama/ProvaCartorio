@@ -1,6 +1,6 @@
 using Domain.Data.Clientes;
 using Domain.Data.Vendas;
-using Domain.Logic.Clientes;
+using Domain.Repositories.Clientes;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,9 +18,9 @@ public class ClienteRepository : IClienteRepository
         dbSet = dbContext.Clientes;
     }
 
-    public void Save()
+    public async Task Save()
     {
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task Create(Cliente cliente)

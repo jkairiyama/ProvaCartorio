@@ -1,6 +1,6 @@
 using Domain.Data.Clientes;
 using MediatR;
-using Domain.Logic.Clientes;
+using Domain.Repositories.Clientes;
 
 namespace AppCartorio.Clientes;
 
@@ -20,9 +20,13 @@ public class UpdateClienteCommandHandler : IRequestHandler<UpdateClienteCommand,
         {
             throw new Exception("Cliente não foi achado.");
         }
+        cli.SetNome(request.Nome);
+        cli.SetEmail(request.Email);
+        cli.SetEndereco(request.Endereco);
+        cli.SetTelefone(request.Telefone);
 
-        await _clienteRepository.Create(cli);
-        _clienteRepository.Save();
+        _clienteRepository.Update(cli);
+        await _clienteRepository.Save();
 
         return cli;
     }
