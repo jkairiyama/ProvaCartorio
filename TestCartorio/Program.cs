@@ -45,7 +45,7 @@ namespace TestCartorio
                         .AddAppCartorio()
                         .AddInfrastructure(conn)
                         .AddTransient<Form1>()
-                        .AddMapster(); ;
+                        .AddMapster();
 
                     //.AddInfrastructure(conn)
                 });

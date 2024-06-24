@@ -72,5 +72,4 @@ public class ProdutoRepository : IProdutoRepository
         dbSet.Attach(produto);
         _dbContext.Entry(produto).State = EntityState.Modified;
     }
-
 }

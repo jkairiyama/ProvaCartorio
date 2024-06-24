@@ -23,17 +23,38 @@ public sealed class VendaItem
         Preco = preco;
     }
 
-    public VendaItem SetQnty(int qnty)
+    public VendaItem(
+        int vendaItemid,
+        int vendaId,
+        int produtoId,
+        int quantidade,
+        decimal preco)
+    : this(
+          vendaId,
+          produtoId,
+          quantidade,
+          preco)
+
+    {
+        this.VendaItemId = vendaItemid;
+    }
+
+    public VendaItem SetQuantidade(int qnty)
     {
         Quantidade = qnty;
         return this;
     }
 
-    public VendaItem setPreco(decimal preco)
+    public VendaItem SetPreco(decimal preco)
     {
         Preco = preco;
         return this;
     }
 
+    public VendaItem SetProdutoId(int produtoId)
+    {
+        ProdutoId = produtoId;
+        return this;
+    }
 
 }

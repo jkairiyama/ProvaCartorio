@@ -8,6 +8,7 @@ using MediatR;
 using AppCartorio.Clientes;
 using AppCartorio.Produtos;
 using MapsterMapper;
+using AppCartorio.Vendas;
 
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -32,19 +33,45 @@ namespace TestCartorio
             _mediator = mediator;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            //var cli = new Cliente(nome: "Jorge", endereco : "Rua Joao Simoni 116", telefone : "11 99369 528", email : "jk@gmail.com" );
-            //New cliente
-            var cli = new Cliente(
-                nome: "tia Jasmine",
-                endereco: "Silva 130",
-                telefone: "11 99369 888",
-                email: "fridita@gmail.com"
+            //Update Venda, add item
+            var vendQuery = new GetVendaByIdQuery(VendaId: 14);
+            var venda = await _mediator.Send(vendQuery);
+
+            //Modifica a venda e adiciona item novo
+            var vendCmmd = new UpdateVendaCommand(
+                VendaId: venda.VendaId,
+                ClienteId: venda.ClienteId,
+                Data: venda.Data,
+                Items: [
+                    new UpdateVendaItemCommand(
+                            VendaItemId : default,
+                            VendaId : venda.VendaId,
+                            ProdutoId: 1,
+                            Preco: 0.15M,
+                            Quantidade : 1
+                        )]
             );
 
-            var c = _clienteRepository.Create(cli);
-            _clienteRepository.Save();
+            //Adiciona os items velhos
+            foreach (var itm in venda.Items)
+            {
+                if (itm.VendaItemId != 20)
+                {
+                    vendCmmd.Items.Add(
+                        new UpdateVendaItemCommand(
+                                VendaItemId: itm.VendaItemId,
+                                VendaId: itm.VendaId,
+                                ProdutoId: itm.ProdutoId,
+                                Preco: itm.Preco + 100M,
+                                Quantidade: itm.Quantidade
+                        )
+                    );
+                }
+            }
+
+            var v = _mediator.Send(vendCmmd);
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -82,19 +109,26 @@ namespace TestCartorio
         private async void button4_Click(object sender, EventArgs e)
         {
             //New venda
-            int produtoId = 1;
-            int clienteId = 2;
-            var prod = await _produtoRepository.Get(produtoId);
+            var newVenda = new CreateVendaCommand(
+                ClienteId: 103,
+                Data: DateTime.UtcNow,
+                Items: new List<CreateVendaItemCommand>()
+                {
+                    new CreateVendaItemCommand(
+                        ProdutoId: 5,
+                        Preco: 35,
+                        Quantidade:1
+                    ),
+                    new CreateVendaItemCommand(
+                        ProdutoId: 3,
+                        Preco: 34,
+                        Quantidade:1
+                    )
+                }
+            );
 
-            if (prod is null)
-            {
-                return;
-            }
-            var v = await _vendaRepository.Create(clienteId, DateTime.UtcNow);
-            v.AddItem(produtoId: 2, qnty: 32, preco: 0.16M);
-            v.AddItem(produtoId: 1, qnty: 15, preco: 0.20M);
+            var v = await _mediator.Send(newVenda);
 
-            await _vendaRepository.Save();
         }
 
         private async void button5_Click(object sender, EventArgs e)

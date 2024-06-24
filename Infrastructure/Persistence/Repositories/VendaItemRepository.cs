@@ -26,4 +26,8 @@ public class VendaItemRepository : IVendaItemRepository
         return qnty;
     }
 
+    public void Remove(VendaItem vendaItem)
+    {
+        dbSet.Remove(vendaItem);
+    }
 }

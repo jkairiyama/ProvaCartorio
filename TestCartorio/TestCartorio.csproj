@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppCartorio\AppCartorio.csproj" />
-    <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 

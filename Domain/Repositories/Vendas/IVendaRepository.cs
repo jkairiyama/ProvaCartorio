@@ -15,7 +15,7 @@ public interface IVendaRepository
 
     Task Remove(int vendaId);
 
-    void Update(Venda venda);
+    Task<Venda> Update(Venda venda);
 
     Task<Venda?> Get(int vendaId);
 
@@ -24,6 +24,10 @@ public interface IVendaRepository
         int produtoId,
         int qnty,
         decimal preco);
+
+    // void RemoveItem(
+    //     int VendaItemId
+    // );
 
     Task UpdateItem(VendaItem item);
 

@@ -1,4 +1,3 @@
-using Contracts.ViewModels.Clientes;
 using Domain.Data.Clientes;
 using MediatR;
 
