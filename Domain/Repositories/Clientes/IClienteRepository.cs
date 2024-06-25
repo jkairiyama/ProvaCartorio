@@ -20,6 +20,7 @@ public interface IClienteRepository
     Task<ICollection<Cliente>> Get(string nome);
 
 
+
 }
 
 

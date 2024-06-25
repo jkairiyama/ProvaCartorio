@@ -39,7 +39,16 @@
             button7 = new Button();
             button8 = new Button();
             button9 = new Button();
+            menuStrip1 = new MenuStrip();
+            cartorioToolStripMenuItem = new ToolStripMenuItem();
+            clienteToolStripMenuItem = new ToolStripMenuItem();
+            novoClienteToolStripMenuItem = new ToolStripMenuItem();
+            listadoToolStripMenuItem = new ToolStripMenuItem();
+            produtosToolStripMenuItem = new ToolStripMenuItem();
+            novoProdutoToolStripMenuItem = new ToolStripMenuItem();
+            listadoToolStripMenuItem1 = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -152,6 +161,62 @@
             button9.UseVisualStyleBackColor = true;
             button9.Click += button9_Click;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { cartorioToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(982, 24);
+            menuStrip1.TabIndex = 11;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // cartorioToolStripMenuItem
+            // 
+            cartorioToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { clienteToolStripMenuItem, produtosToolStripMenuItem });
+            cartorioToolStripMenuItem.Name = "cartorioToolStripMenuItem";
+            cartorioToolStripMenuItem.Size = new Size(62, 20);
+            cartorioToolStripMenuItem.Text = "&Cartorio";
+            // 
+            // clienteToolStripMenuItem
+            // 
+            clienteToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { novoClienteToolStripMenuItem, listadoToolStripMenuItem });
+            clienteToolStripMenuItem.Name = "clienteToolStripMenuItem";
+            clienteToolStripMenuItem.Size = new Size(122, 22);
+            clienteToolStripMenuItem.Text = "&Clientes";
+            // 
+            // novoClienteToolStripMenuItem
+            // 
+            novoClienteToolStripMenuItem.Name = "novoClienteToolStripMenuItem";
+            novoClienteToolStripMenuItem.Size = new Size(180, 22);
+            novoClienteToolStripMenuItem.Text = "&Novo Cliente";
+            novoClienteToolStripMenuItem.Click += novoClienteToolStripMenuItem_Click;
+            // 
+            // listadoToolStripMenuItem
+            // 
+            listadoToolStripMenuItem.Name = "listadoToolStripMenuItem";
+            listadoToolStripMenuItem.Size = new Size(180, 22);
+            listadoToolStripMenuItem.Text = "&Listado";
+            listadoToolStripMenuItem.Click += listadoToolStripMenuItem_Click;
+            // 
+            // produtosToolStripMenuItem
+            // 
+            produtosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { novoProdutoToolStripMenuItem, listadoToolStripMenuItem1 });
+            produtosToolStripMenuItem.Name = "produtosToolStripMenuItem";
+            produtosToolStripMenuItem.Size = new Size(122, 22);
+            produtosToolStripMenuItem.Text = "&Produtos";
+            // 
+            // novoProdutoToolStripMenuItem
+            // 
+            novoProdutoToolStripMenuItem.Name = "novoProdutoToolStripMenuItem";
+            novoProdutoToolStripMenuItem.Size = new Size(149, 22);
+            novoProdutoToolStripMenuItem.Text = "Novo P&roduto";
+            // 
+            // listadoToolStripMenuItem1
+            // 
+            listadoToolStripMenuItem1.Name = "listadoToolStripMenuItem1";
+            listadoToolStripMenuItem1.Size = new Size(149, 22);
+            listadoToolStripMenuItem1.Text = "Listado";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -168,9 +233,13 @@
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -188,5 +257,13 @@
         private Button button7;
         private Button button8;
         private Button button9;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem cartorioToolStripMenuItem;
+        private ToolStripMenuItem clienteToolStripMenuItem;
+        private ToolStripMenuItem novoClienteToolStripMenuItem;
+        private ToolStripMenuItem listadoToolStripMenuItem;
+        private ToolStripMenuItem produtosToolStripMenuItem;
+        private ToolStripMenuItem novoProdutoToolStripMenuItem;
+        private ToolStripMenuItem listadoToolStripMenuItem1;
     }
 }

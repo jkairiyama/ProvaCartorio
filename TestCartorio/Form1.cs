@@ -20,17 +20,23 @@ namespace TestCartorio
         private readonly IProdutoRepository _produtoRepository;
         private readonly IVendaRepository _vendaRepository;
         private readonly ISender _mediator;
+        private readonly frm_ClienteNewUpdate _frm_Cliente;
+        private readonly frm_clientes _frm_clientes;
         public Form1(
             IClienteRepository clienteRepository,
             IProdutoRepository produtoRepository,
             IVendaRepository vendaRepository,
-            ISender mediator)
+            ISender mediator,
+            frm_ClienteNewUpdate frm_Cliente,
+            frm_clientes frm_clientes)
         {
             InitializeComponent();
             _clienteRepository = clienteRepository;
             _produtoRepository = produtoRepository;
             _vendaRepository = vendaRepository;
             _mediator = mediator;
+            _frm_Cliente = frm_Cliente;
+            _frm_clientes = frm_clientes;
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -178,6 +184,21 @@ namespace TestCartorio
 
             label1.Text = prod?.Nome ?? "Alicate";
 
+        }
+
+        private void novoClienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //frm_ClienteNewUpdate fmrCli = new frm_ClienteNewUpdate
+            //{
+            //    isNew = true
+            //};
+            _frm_Cliente.IsNew = true;
+            _frm_Cliente.ShowDialog();
+        }
+
+        private void listadoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _frm_clientes.ShowDialog();
         }
     }
 }

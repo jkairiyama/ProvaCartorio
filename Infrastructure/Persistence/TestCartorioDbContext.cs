@@ -18,6 +18,8 @@ public class TestCartorioDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //modelBuilder.UseCollation("NOCASE");
+
         modelBuilder.HasDefaultSchema("public");
         modelBuilder.UseIdentityByDefaultColumns();
         modelBuilder.ApplyConfiguration(new ClienteConfiguration());

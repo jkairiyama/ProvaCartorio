@@ -3,6 +3,7 @@ using Domain.Data.Vendas;
 using Domain.Repositories.Clientes;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 
 namespace Infrastructure.Repositories;
@@ -11,6 +12,7 @@ public class ClienteRepository : IClienteRepository
 {
     private readonly TestCartorioDbContext _dbContext;
     internal DbSet<Cliente> dbSet;
+    private const int top = 10;
 
     public ClienteRepository(TestCartorioDbContext dbContext)
     {
@@ -44,15 +46,29 @@ public class ClienteRepository : IClienteRepository
 
     public async Task<ICollection<Cliente>> Get(string nome)
     {
-        var cli_lst = await dbSet
-            .Where(cli => cli.Nome.StartsWith(nome))
-            .Take(10)
-            .ToListAsync();
+        if (!string.IsNullOrWhiteSpace(nome))
+        {
+            var cli_lst = await dbSet
+                .Where(c => c.Nome.ToLower().StartsWith(nome.ToLower())) //Melhorar, porque não consegue usar indice no banco
+                .OrderBy(c => c.ClienteId)
+                .Take(top)
+                .ToListAsync();
+            return cli_lst;
+            //var cli_lst = await dbSet
+            //    .Where(c => c.Nome.StartsWith(nome)) 
+            //    .Take(top)
+            //    .ToListAsync();
+            //return cli_lst;
+        }
+        else
+        {
+            var cli_lst = await dbSet
+                .Take(top)
+                .ToListAsync();
+            return cli_lst;
+        }
 
-        return cli_lst;
     }
-
-
     public async Task Remove(int clienteId)
     {
         Cliente? clie = await dbSet.FindAsync(clienteId);
@@ -77,6 +93,8 @@ public class ClienteRepository : IClienteRepository
         dbSet.Attach(cliente);
         _dbContext.Entry(cliente).State = EntityState.Modified;
     }
+
+
 
     // public async Task AddVenda(int clienteId, Venda venda)
     // {

@@ -44,11 +44,19 @@ namespace TestCartorio
                     services
                         .AddAppCartorio()
                         .AddInfrastructure(conn)
-                        .AddTransient<Form1>()
+                        .AddForms()
                         .AddMapster();
-
-                    //.AddInfrastructure(conn)
                 });
+        }
+
+        static IServiceCollection AddForms(this IServiceCollection services)
+        {
+            services
+                .AddTransient<Form1>()
+                .AddTransient<frm_ClienteNewUpdate>()
+                .AddTransient<frm_clientes>();
+
+            return services;
         }
     }
 }
