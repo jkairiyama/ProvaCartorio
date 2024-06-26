@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Data.Produtos;
 
 namespace Domain.Data.Vendas.Entities;
 
-public sealed class VendaItem
+public sealed class VendaItem: IEquatable<VendaItem>
 {
     public int VendaItemId { get; private set; }
     public int VendaId { get; private set; }
     public int ProdutoId { get; private set; }
+    public Produto? Produto { get; }
     public int Quantidade { get; private set; }
     public decimal Preco { get; private set; }
 
@@ -56,5 +58,13 @@ public sealed class VendaItem
         ProdutoId = produtoId;
         return this;
     }
+
+    public bool Equals(VendaItem? other)
+    {
+            if (other is null)
+                return false;
+
+            return this.VendaId == other.VendaId;
+        }
 
 }

@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Repositories.Vendas;
 using Domain.Data.Vendas.Entities;
 using Domain.Data.Produtos;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Runtime.CompilerServices;
 
 namespace Infrastructure.Repositories;
 
@@ -80,16 +82,18 @@ public class VendaRepository : IVendaRepository
     {
         var v = await dbSet
             .Include(v => v.Items)
+            .ThenInclude(itm => itm.Produto)
+            .Include(v => v.Cliente)
             .FirstOrDefaultAsync(v => v.VendaId == vendaId);
 
         return v;
     }
 
-    public async Task<ICollection<Venda>?> GetByCliente(int clienteId)
+    public async Task<ICollection<Venda>> GetByCliente(int clienteId)
     {
         var v = await dbSet
         .Include(v => v.Items)
-                .Include(v => v.Items)
+                .Include(v => v.Cliente)
                 .Where(v => v.ClienteId == clienteId)
                 .ToListAsync();
         return v;
@@ -100,10 +104,11 @@ public class VendaRepository : IVendaRepository
         var qnty = await dbSet.Where(v => v.ClienteId == clienteId).CountAsync();
         return qnty;
     }
-    public async Task<ICollection<Venda>?> GetBydata(DateTime dataVenda)
+    public async Task<ICollection<Venda>> GetByData(DateTime dataVenda)
     {
         var v = await dbSet
                 .Where(v => v.Data == dataVenda)
+                .Include(v => v.ClienteId)
                 .ToListAsync();
         return v;
     }
@@ -183,16 +188,36 @@ public class VendaRepository : IVendaRepository
         }
 
         //3. Os items velhos que agora estao excluidos da venda
-        foreach (var itmOld in vendaDb.Items)
+        var imtExcluir = vendaDb.Items.Except(venda.Items);
+        imtExcluir?.ToList().ForEach(async (vi) =>
         {
-            var itmAtualizado = venda.Items.Where(itm => itm.VendaItemId == itmOld.VendaItemId).FirstOrDefault();
-            if (itmAtualizado is null)
-            {
-                var prod = await dbSetProduto.FindAsync(itmOld.ProdutoId) ?? throw new Exception($"Não foi achado o produto ({itmOld.ProdutoId})");
-                prod.SetEstoque(prod.Estoque + itmOld.Quantidade);
-                _dbContext.Entry(itmOld).State = EntityState.Deleted;
-            }
-        }
+            //Correge o estoque
+            var prod = await dbSetProduto.FindAsync(vi.ProdutoId) ?? throw new Exception($"Não foi achado o produto ({vi.ProdutoId})");
+            prod?.SetEstoque(prod.Estoque + vi.Quantidade);
+            //Marca para excluir o item da venda no banco
+            _dbContext.Entry(vi).State = EntityState.Deleted;
+        });
+
+
+
+        //-----------
+        //foreach (var itm in imtExcluir)
+        //{
+        //    var prod = await dbSetProduto.FindAsync(itm.ProdutoId) ?? throw new Exception($"Não foi achado o produto ({itm.ProdutoId})");
+        //    prod.SetEstoque(prod.Estoque + itm.Quantidade);
+        //    _dbContext.Entry(itm).State = EntityState.Deleted;
+        //}
+        //---------------
+        //foreach (var itmOld in vendaDb.Items)
+        //{
+        //    var itmAtualizado = venda.Items.Where(itm => itm.VendaItemId == itmOld.VendaItemId).FirstOrDefault();
+        //    if (itmAtualizado is null)
+        //    {
+        //        var prod = await dbSetProduto.FindAsync(itmOld.ProdutoId) ?? throw new Exception($"Não foi achado o produto ({itmOld.ProdutoId})");
+        //        prod.SetEstoque(prod.Estoque + itmOld.Quantidade);
+        //        _dbContext.Entry(itmOld).State = EntityState.Deleted;
+        //    }
+        //}
 
         _dbContext.Entry(vendaDb).State = EntityState.Modified;
         return vendaDb;

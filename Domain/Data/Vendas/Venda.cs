@@ -10,7 +10,7 @@ public class Venda
 
     public int? ClienteId { get; private set; }
 
-    public Cliente? Cliente { get; }
+    public Cliente? Cliente { get; private set; }
 
     public DateTime Data { get; private set; }
     private List<VendaItem> _items;

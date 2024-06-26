@@ -42,6 +42,7 @@
             gv_venda_items = new DataGridView();
             btn_venda_pagar = new Button();
             btn_venda_sair = new Button();
+            lbl_error = new Label();
             ((System.ComponentModel.ISupportInitialize)gv_venda_items).BeginInit();
             SuspendLayout();
             // 
@@ -120,6 +121,7 @@
             btn_venda_produto_pesquisar.TabIndex = 7;
             btn_venda_produto_pesquisar.Text = "...";
             btn_venda_produto_pesquisar.UseVisualStyleBackColor = true;
+            btn_venda_produto_pesquisar.Click += btn_venda_produto_pesquisar_Click;
             // 
             // txt_venda_produto_qnt
             // 
@@ -143,8 +145,9 @@
             btn_venda_produto_inserir.Name = "btn_venda_produto_inserir";
             btn_venda_produto_inserir.Size = new Size(75, 23);
             btn_venda_produto_inserir.TabIndex = 10;
-            btn_venda_produto_inserir.Text = "Inserir";
+            btn_venda_produto_inserir.Text = "Incluir";
             btn_venda_produto_inserir.UseVisualStyleBackColor = true;
+            btn_venda_produto_inserir.Click += btn_venda_produto_inserir_Click;
             // 
             // gv_venda_items
             // 
@@ -164,8 +167,9 @@
             btn_venda_pagar.Name = "btn_venda_pagar";
             btn_venda_pagar.Size = new Size(75, 23);
             btn_venda_pagar.TabIndex = 12;
-            btn_venda_pagar.Text = "Pagar";
+            btn_venda_pagar.Text = "Gerar Venda";
             btn_venda_pagar.UseVisualStyleBackColor = true;
+            btn_venda_pagar.Click += btn_venda_pagar_Click;
             // 
             // btn_venda_sair
             // 
@@ -177,11 +181,20 @@
             btn_venda_sair.UseVisualStyleBackColor = true;
             btn_venda_sair.Click += btn_venda_sair_Click;
             // 
+            // lbl_error
+            // 
+            lbl_error.AutoSize = true;
+            lbl_error.Location = new Point(181, 24);
+            lbl_error.Name = "lbl_error";
+            lbl_error.Size = new Size(0, 15);
+            lbl_error.TabIndex = 14;
+            // 
             // frm_VendaNova
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(969, 525);
+            Controls.Add(lbl_error);
             Controls.Add(btn_venda_sair);
             Controls.Add(btn_venda_pagar);
             Controls.Add(gv_venda_items);
@@ -198,6 +211,7 @@
             Controls.Add(label1);
             Name = "frm_VendaNova";
             Text = "Venda Nova";
+            Load += frm_VendaNova_Load;
             ((System.ComponentModel.ISupportInitialize)gv_venda_items).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -219,5 +233,6 @@
         private DataGridView gv_venda_items;
         private Button btn_venda_pagar;
         private Button btn_venda_sair;
+        private Label lbl_error;
     }
 }

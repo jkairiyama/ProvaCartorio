@@ -17,7 +17,6 @@ public interface IVendaRepository
 
     Task<Venda> Update(Venda venda);
 
-    Task<Venda?> Get(int vendaId);
 
     Task AddItem(
         int vendaId,
@@ -31,9 +30,11 @@ public interface IVendaRepository
 
     Task UpdateItem(VendaItem item);
 
-    Task<ICollection<Venda>?> GetBydata(DateTime dataVenda);
+    Task<Venda?> Get(int vendaId);
 
-    Task<ICollection<Venda>?> GetByCliente(int clienteId);
+    Task<ICollection<Venda>> GetByData(DateTime dataVenda);
+
+    Task<ICollection<Venda>> GetByCliente(int clienteId);
 
     Task<int> GetCountByCliente(int clienteId);
 

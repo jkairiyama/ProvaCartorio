@@ -22,6 +22,12 @@ class VendaItemConfiguration : IEntityTypeConfiguration<VendaItem>
         builder
             .Property("ProdutoId")
             .HasMaxLength(256);
+
+        builder
+            .HasOne(v => v.Produto)
+            .WithMany()
+            .HasForeignKey(c => c.ProdutoId);
+
         builder
             .Property("Quantidade")
             .IsRequired();

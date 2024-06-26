@@ -55,7 +55,7 @@ namespace TestCartorio
 
                 var clientes = await _mediator.Send(queryCliente);
 
-                gv_cliente_pesquisar.DataSource = clientes;
+                gv_cliente_pesquisar.DataSource = new BindingSource(clientes, null);
 
                 lbl_error.Text = "";
             }
@@ -145,6 +145,7 @@ namespace TestCartorio
                         _frm_Cliente.ClienteId = clienteId;
                         _frm_Cliente.IsNew = false;
                         _frm_Cliente.ShowDialog();
+                        _frm_Cliente.IsNew = true;
                         this.btn_clie_pesquisar_Click(sender, e);
                     }
                     else

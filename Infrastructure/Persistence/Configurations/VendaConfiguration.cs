@@ -27,11 +27,16 @@ class VendaConfiguration : IEntityTypeConfiguration<Venda>
             .Property("ClienteId")
             .IsRequired(false);
 
+        //builder
+        //    .HasOne<Cliente>()
+        //    .WithMany()
+        //    .IsRequired(false)
+        //    .HasForeignKey("ClienteId");
         builder
-            .HasOne<Cliente>()
+            .HasOne(v => v.Cliente)
             .WithMany()
-            .IsRequired(false)
-            .HasForeignKey("ClienteId");
+            .HasForeignKey(c => c.ClienteId)
+            .IsRequired(false);
 
         builder
             .Property("Data")
@@ -51,6 +56,10 @@ class VendaConfiguration : IEntityTypeConfiguration<Venda>
 
         var navigation = builder.Metadata.FindNavigation(nameof(Venda.Items));
         navigation?.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        //builder
+        //.Navigation(v => v.Cliente)
+        //.UsePropertyAccessMode(PropertyAccessMode.Field);
 
     }
 }

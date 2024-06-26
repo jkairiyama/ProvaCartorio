@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Domain.Data.Produtos;
 
 namespace TestCartorio
 {
@@ -20,6 +21,7 @@ namespace TestCartorio
         private bool _isSelectionAction = false;
         private int _produtoId;
         private string _produtoNome;
+        private decimal _preco;
 
         public frm_Produtos(
             ISender mediator,
@@ -45,7 +47,12 @@ namespace TestCartorio
             get { return _produtoNome; }
             set { _produtoNome = value; }
         }
-
+        public decimal Preco
+        {
+            get { return _preco; }
+            set { _preco = value; }
+        }
+ 
         private async void btn_prod_pesquisar_Click(object sender, EventArgs e)
         {
             lbl_error.ForeColor = Color.Black;
@@ -57,9 +64,9 @@ namespace TestCartorio
                     );
 
 
-                var produtos = await _mediator.Send(queryProduto);
+                var Produtos = await _mediator.Send(queryProduto);
 
-                gv_produto_pesquisar.DataSource = produtos;
+                gv_produto_pesquisar.DataSource = new BindingSource(Produtos, null);
 
                 lbl_error.Text = "";
             }
@@ -135,53 +142,50 @@ namespace TestCartorio
 
             try
             {
-                int ProdutoId;
+                //int ProdutoId;
                 if (!IsSelectionAction)
                 {
-                    ProdutoId = (int)gv_produto_pesquisar[2, e.RowIndex].Value;
+                    this.ProdutoId = (int)gv_produto_pesquisar[2, e.RowIndex].Value;
+                    if (e.ColumnIndex == gv_produto_pesquisar.Columns["edit_column"].Index)
+                    {
+                        _frm_Produto.ProdutoId = ProdutoId;
+                        _frm_Produto.IsNew = false;
+                        _frm_Produto.ShowDialog();
+                        this.btn_prod_pesquisar_Click(sender, e);
+                    }
+                    else
+                        if (e.ColumnIndex == gv_produto_pesquisar.Columns["remove_column"].Index)
+                    {
+                        var confirmResult = MessageBox.Show("Tem certeça que quer excluir o Produto??",
+                                         "Confirmação excluir!!",
+                                         MessageBoxButtons.YesNo);
+
+                        if (confirmResult == DialogResult.No) return;
+
+                        lbl_error.ForeColor = Color.Black;
+                        lbl_error.Text = "Gravando dados ...";
+
+                        var cmdRemoveProduto = new RemoveProdutoCommand(
+                                ProdutoId: this.ProdutoId
+                            );
+                        var produto = await _mediator.Send(cmdRemoveProduto);
+                        this.btn_prod_pesquisar_Click(sender, e);
+
+                        lbl_error.Text = "Dados gravados corretamente.";
+                        await Task.Delay(1000);
+                        lbl_error.Text = string.Empty;
+
+                    }
                 }                    
                 else
                 {
-                    ProdutoId = (int)gv_produto_pesquisar[1, e.RowIndex].Value;
-                }
-
-
-                if (e.ColumnIndex == gv_produto_pesquisar.Columns["edit_column"].Index)
-                {
-                    _frm_Produto.ProdutoId = ProdutoId;
-                    _frm_Produto.IsNew = false;
-                    _frm_Produto.ShowDialog();
-                    this.btn_prod_pesquisar_Click(sender, e);
-                }
-                else
-                    if (e.ColumnIndex == gv_produto_pesquisar.Columns["remove_column"].Index)
-                {
-                    var confirmResult = MessageBox.Show("Tem certeça que quer excluir o Produto??",
-                                     "Confirmação excluir!!",
-                                     MessageBoxButtons.YesNo);
-
-                    if (confirmResult == DialogResult.No) return;
-
-                    lbl_error.ForeColor = Color.Black;
-                    lbl_error.Text = "Gravando dados ...";
-
-                    var cmdRemoveProduto = new RemoveProdutoCommand(
-                            ProdutoId: ProdutoId
-                        );
-                    var produto = await _mediator.Send(cmdRemoveProduto);
-                    this.btn_prod_pesquisar_Click(sender, e);
-
-                    lbl_error.Text = "Dados gravados corretamente.";
-                    await Task.Delay(1000);
-                    lbl_error.Text = string.Empty;
-
-                }
-                else
+                    this.ProdutoId = (int)gv_produto_pesquisar[1, e.RowIndex].Value;
                     if (e.ColumnIndex == gv_produto_pesquisar.Columns["mark_column"].Index)
-                {
-                    this.ProdutoId = ProdutoId;
-                    this.ProdutoNome = gv_produto_pesquisar[2, e.RowIndex].Value.ToString();
-                    this.Hide();
+                    {
+                        this.ProdutoNome = gv_produto_pesquisar[2, e.RowIndex].Value.ToString();
+                        this.Preco = decimal.Parse(gv_produto_pesquisar[4, e.RowIndex].Value.ToString());
+                        this.Hide();
+                    }
                 }
 
 
