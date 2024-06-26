@@ -54,7 +54,10 @@ namespace TestCartorio
             services
                 .AddTransient<Form1>()
                 .AddTransient<frm_ClienteNewUpdate>()
-                .AddTransient<frm_clientes>();
+                .AddTransient<frm_clientes>()
+                .AddTransient<frmProdutoNovo>()
+                .AddTransient<frm_Produtos>();
+            
 
             return services;
         }

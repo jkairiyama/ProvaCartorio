@@ -11,6 +11,8 @@ public class ProdutoRepository : IProdutoRepository
     private readonly TestCartorioDbContext _dbContext;
     internal DbSet<Produto> dbSet;
 
+    private const int top = 10;
+
     public ProdutoRepository(TestCartorioDbContext dbContext)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -43,7 +45,9 @@ public class ProdutoRepository : IProdutoRepository
     public async Task<ICollection<Produto>> GetByNome(string nome)
     {
         return await dbSet
-            .Where(cli => cli.Nome.StartsWith(nome))
+            .Where(p => p.Nome.ToLower().StartsWith(nome.ToLower())) //Melhorar, porque não consegue usar indice no banco
+            .OrderBy(p => p.ProdutoId)
+            .Take(top)
             .ToListAsync();
     }
 

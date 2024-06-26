@@ -59,6 +59,7 @@ namespace TestCartorio
                 editButtonColumn.HeaderText = "Editar";
                 editButtonColumn.Text = "Editar";
                 editButtonColumn.UseColumnTextForButtonValue = true;
+                editButtonColumn.Width = 50;
             };
             if (gv_cliente_pesquisar.Columns["edit_column"] is null)
             {
@@ -71,13 +72,12 @@ namespace TestCartorio
                 removeButtonColumn.HeaderText = "Remover";
                 removeButtonColumn.Text = "Remover";
                 removeButtonColumn.UseColumnTextForButtonValue = true;
+                removeButtonColumn.Width = 60;
             };
             if (gv_cliente_pesquisar.Columns["remove_column"] is null)
             {
                 gv_cliente_pesquisar.Columns.Insert(1, removeButtonColumn);
             }
-
-
         }
 
         private void btn_fechar_Click(object sender, EventArgs e)
@@ -87,7 +87,6 @@ namespace TestCartorio
 
         private async void gv_cliente_pesquisar_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
             if (e.RowIndex < 0
                 || !(e.ColumnIndex == gv_cliente_pesquisar.Columns["edit_column"].Index
                     || e.ColumnIndex == gv_cliente_pesquisar.Columns["remove_column"].Index)
@@ -137,8 +136,6 @@ namespace TestCartorio
                 lbl_error.ForeColor = Color.Red;
                 this.lbl_error.Text = ex.Message;
             }
-
-
         }
 
         private void btn_clie_novo_Click(object sender, EventArgs e)

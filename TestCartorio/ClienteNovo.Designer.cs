@@ -152,7 +152,7 @@
             Controls.Add(btn_clie_sair);
             Controls.Add(btn_clie_gravar);
             Name = "frm_ClienteNewUpdate";
-            Text = "ClienteNovo";
+            Text = "Cliente";
             Load += ClienteNovo_Load;
             ResumeLayout(false);
             PerformLayout();

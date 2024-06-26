@@ -22,13 +22,18 @@ namespace TestCartorio
         private readonly ISender _mediator;
         private readonly frm_ClienteNewUpdate _frm_Cliente;
         private readonly frm_clientes _frm_clientes;
+        private readonly frmProdutoNovo _frm_produtoNewUpdate;
+        private readonly frm_Produtos _frm_produtos;
+
         public Form1(
             IClienteRepository clienteRepository,
             IProdutoRepository produtoRepository,
             IVendaRepository vendaRepository,
             ISender mediator,
             frm_ClienteNewUpdate frm_Cliente,
-            frm_clientes frm_clientes)
+            frm_clientes frm_clientes,
+            frmProdutoNovo frm_produtoNewUpdate,
+            frm_Produtos frm_produtos)
         {
             InitializeComponent();
             _clienteRepository = clienteRepository;
@@ -37,6 +42,8 @@ namespace TestCartorio
             _mediator = mediator;
             _frm_Cliente = frm_Cliente;
             _frm_clientes = frm_clientes;
+            _frm_produtoNewUpdate = frm_produtoNewUpdate;
+            _frm_produtos = frm_produtos;
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -199,6 +206,17 @@ namespace TestCartorio
         private void listadoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _frm_clientes.ShowDialog();
+        }
+
+        private void novoProdutoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _frm_produtoNewUpdate.IsNew = true;
+            _frm_produtoNewUpdate.ShowDialog();
+        }
+
+        private void listadoToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            _frm_produtos.ShowDialog();
         }
     }
 }
