@@ -17,6 +17,10 @@ namespace TestCartorio
     {
         private readonly ISender _mediator;
         private readonly frmProdutoNovo _frm_Produto;
+        private bool _isSelectionAction = false;
+        private int _produtoId;
+        private string _produtoNome;
+
         public frm_Produtos(
             ISender mediator,
             frmProdutoNovo frm_Produto)
@@ -24,6 +28,22 @@ namespace TestCartorio
             InitializeComponent();
             _mediator = mediator;
             _frm_Produto = frm_Produto;
+        }
+
+        public bool IsSelectionAction
+        {
+            get { return _isSelectionAction; }
+            set { _isSelectionAction = value; }
+        }
+        public int ProdutoId
+        {
+            get { return _produtoId; }
+            set { _produtoId = value; }
+        }
+        public string ProdutoNome
+        {
+            get { return _produtoNome; }
+            set { _produtoNome = value; }
         }
 
         private async void btn_prod_pesquisar_Click(object sender, EventArgs e)
@@ -56,46 +76,75 @@ namespace TestCartorio
             txt_produto_pesquisar.Text = string.Empty;
             txt_produto_pesquisar.Focus();
 
+            if (!IsSelectionAction)
+            {
+                DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn();
+                {
+                    editButtonColumn.Name = "edit_column";
+                    editButtonColumn.HeaderText = "";
+                    editButtonColumn.Text = "Editar";
+                    editButtonColumn.UseColumnTextForButtonValue = true;
+                    editButtonColumn.Width = 50;
+                };
+                if (gv_produto_pesquisar.Columns["edit_column"] is null)
+                {
+                    gv_produto_pesquisar.Columns.Insert(0, editButtonColumn);
+                }
 
-            DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn();
+                DataGridViewButtonColumn removeButtonColumn = new DataGridViewButtonColumn();
+                {
+                    removeButtonColumn.Name = "remove_column";
+                    removeButtonColumn.HeaderText = "";
+                    removeButtonColumn.Text = "Remover";
+                    removeButtonColumn.UseColumnTextForButtonValue = true;
+                    removeButtonColumn.Width = 60;
+                };
+                if (gv_produto_pesquisar.Columns["remove_column"] is null)
+                {
+                    gv_produto_pesquisar.Columns.Insert(1, removeButtonColumn);
+                }
+            }
+            else
             {
-                editButtonColumn.Name = "edit_column";
-                editButtonColumn.HeaderText = "";
-                editButtonColumn.Text = "Editar";
-                editButtonColumn.UseColumnTextForButtonValue = true;
-                editButtonColumn.Width = 50;
-            };
-            if (gv_produto_pesquisar.Columns["edit_column"] is null)
-            {
-                gv_produto_pesquisar.Columns.Insert(0, editButtonColumn);
+                DataGridViewButtonColumn markButtonColumn = new DataGridViewButtonColumn();
+                {
+                    markButtonColumn.Name = "mark_column";
+                    markButtonColumn.HeaderText = "";
+                    markButtonColumn.Text = "Escolher";
+                    markButtonColumn.UseColumnTextForButtonValue = true;
+                    markButtonColumn.Width = 60;
+                };
+                if (gv_produto_pesquisar.Columns["mark_column"] is null)
+                {
+                    gv_produto_pesquisar.Columns.Insert(0, markButtonColumn);
+                }
             }
 
-            DataGridViewButtonColumn removeButtonColumn = new DataGridViewButtonColumn();
-            {
-                removeButtonColumn.Name = "remove_column";
-                removeButtonColumn.HeaderText = "";
-                removeButtonColumn.Text = "Remover";
-                removeButtonColumn.UseColumnTextForButtonValue = true;
-                removeButtonColumn.Width = 60;
-            };
-            if (gv_produto_pesquisar.Columns["remove_column"] is null)
-            {
-                gv_produto_pesquisar.Columns.Insert(1, removeButtonColumn);
-            }
         }
 
         private async void gv_produto_pesquisar_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0
-                || !(e.ColumnIndex == gv_produto_pesquisar.Columns["edit_column"].Index
-                    || e.ColumnIndex == gv_produto_pesquisar.Columns["remove_column"].Index)
-               ) return;
+            if (e.RowIndex < 0)
+                return;
+
+
+               // || !(e.ColumnIndex == gv_produto_pesquisar.Columns["edit_column"].Index
+               //     || e.ColumnIndex == gv_produto_pesquisar.Columns["remove_column"].Index
+               //     || e.ColumnIndex == gv_produto_pesquisar.Columns["mark_column"].Index)
+               //) return;
 
             try
             {
+                int ProdutoId;
+                if (!IsSelectionAction)
+                {
+                    ProdutoId = (int)gv_produto_pesquisar[2, e.RowIndex].Value;
+                }                    
+                else
+                {
+                    ProdutoId = (int)gv_produto_pesquisar[1, e.RowIndex].Value;
+                }
 
-
-                int ProdutoId = (int)gv_produto_pesquisar[2, e.RowIndex].Value;
 
                 if (e.ColumnIndex == gv_produto_pesquisar.Columns["edit_column"].Index)
                 {
@@ -107,7 +156,7 @@ namespace TestCartorio
                 else
                     if (e.ColumnIndex == gv_produto_pesquisar.Columns["remove_column"].Index)
                 {
-                    var confirmResult = MessageBox.Show("Seguro quer excluir o Produto??",
+                    var confirmResult = MessageBox.Show("Tem certeça que quer excluir o Produto??",
                                      "Confirmação excluir!!",
                                      MessageBoxButtons.YesNo);
 
@@ -126,6 +175,13 @@ namespace TestCartorio
                     await Task.Delay(1000);
                     lbl_error.Text = string.Empty;
 
+                }
+                else
+                    if (e.ColumnIndex == gv_produto_pesquisar.Columns["mark_column"].Index)
+                {
+                    this.ProdutoId = ProdutoId;
+                    this.ProdutoNome = gv_produto_pesquisar[2, e.RowIndex].Value.ToString();
+                    this.Hide();
                 }
 
 

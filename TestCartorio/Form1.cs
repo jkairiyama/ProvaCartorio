@@ -24,6 +24,7 @@ namespace TestCartorio
         private readonly frm_clientes _frm_clientes;
         private readonly frmProdutoNovo _frm_produtoNewUpdate;
         private readonly frm_Produtos _frm_produtos;
+        private readonly frm_VendaNova _frm_VendaNova;
 
         public Form1(
             IClienteRepository clienteRepository,
@@ -33,7 +34,8 @@ namespace TestCartorio
             frm_ClienteNewUpdate frm_Cliente,
             frm_clientes frm_clientes,
             frmProdutoNovo frm_produtoNewUpdate,
-            frm_Produtos frm_produtos)
+            frm_Produtos frm_produtos,
+            frm_VendaNova frm_VendaNova)
         {
             InitializeComponent();
             _clienteRepository = clienteRepository;
@@ -44,6 +46,7 @@ namespace TestCartorio
             _frm_clientes = frm_clientes;
             _frm_produtoNewUpdate = frm_produtoNewUpdate;
             _frm_produtos = frm_produtos;
+            _frm_VendaNova = frm_VendaNova;
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -217,6 +220,11 @@ namespace TestCartorio
         private void listadoToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             _frm_produtos.ShowDialog();
+        }
+
+        private void novaVendaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _frm_VendaNova.ShowDialog();
         }
     }
 }

@@ -20,6 +20,7 @@ namespace TestCartorio
         private readonly ISender _mediator;
         private bool _isNewProduto = true;
         private int _produtoId;
+        
         public frmProdutoNovo(ISender mediator)
         {
             InitializeComponent();
@@ -37,6 +38,7 @@ namespace TestCartorio
             get { return _produtoId; }
             set { _produtoId = value; }
         }
+
         private void btn_prod_sair_Click(object sender, EventArgs e)
         {
             this.Hide();
