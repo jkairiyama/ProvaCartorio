@@ -158,9 +158,16 @@ namespace TestCartorio
                     lbl_error.ForeColor = Color.Black;
                     lbl_error.Text = "Gravando dados ...";
 
-                    var cmd = this._venda.Adapt<CreateVendaCommand>();
-
-                    await _mediator.Send(cmd);
+                    if (IsNewVenda)
+                    {
+                        var cmdCreate = this._venda.Adapt<CreateVendaCommand>();
+                        await _mediator.Send(cmdCreate);
+                    }
+                    else
+                    {
+                        var cmdUpdate = this._venda.Adapt<UpdateVendaCommand>();
+                        await _mediator.Send(cmdUpdate);
+                    }
 
                     lbl_error.Text = "Dados gravados corretamente.";
                     await Task.Delay(500);
@@ -177,7 +184,7 @@ namespace TestCartorio
 
         private async void frm_VendaNova_Load(object sender, EventArgs e)
         {
-            AdicionaColunaEdit();
+            AdicionaColunas();
 
             await CarregarDados();
         }
@@ -207,6 +214,7 @@ namespace TestCartorio
                     //gv_venda_items.DataSource = null;
                 }
 
+                //Configuracao para o Mapster 
                 TypeAdapterConfig<Venda, VendaVM>.NewConfig()
                     .Map(dest => dest.ClienteNome, src => src.Cliente.Nome);
 
@@ -221,7 +229,7 @@ namespace TestCartorio
             }
         }
 
-        private void AdicionaColunaEdit()
+        private void AdicionaColunas()
         {
             DataGridViewButtonColumn removeButtonColumn = new DataGridViewButtonColumn();
             {

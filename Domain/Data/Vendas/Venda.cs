@@ -39,6 +39,16 @@ public class Venda
         VendaId = vendaId;
     }
 
+    public Venda(
+        int? clienteId,
+        DateTime data,
+        int vendaId,
+        List<VendaItem> items
+    ) : this(clienteId, data, vendaId)
+    {
+        _items = items;
+    }
+
     public void AddItem(VendaItem item)
     {
         _items.Add(item);

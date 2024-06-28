@@ -64,7 +64,12 @@ public sealed class VendaItem: IEquatable<VendaItem>
             if (other is null)
                 return false;
 
-            return this.VendaId == other.VendaId;
-        }
+            return this.VendaItemId == other.VendaItemId;
+    }
+    public override int GetHashCode()
+    {
+        return this.VendaItemId.GetHashCode();
+    }
+
 
 }

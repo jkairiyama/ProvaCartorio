@@ -89,7 +89,9 @@ namespace TestCartorio
             {
                 _frm_VendaNova.VendaId = vendaId;
                 _frm_VendaNova.IsNewVenda = false;
-                _frm_VendaNova.ShowDialog();                
+                _frm_VendaNova.Text = "Venda";
+                _frm_VendaNova.ShowDialog();
+                _frm_VendaNova.Text = "Venda Nova";
                 _frm_VendaNova.IsNewVenda = true;
             }
         }

@@ -148,47 +148,34 @@ public class VendaRepository : IVendaRepository
             .SetCliente(venda.ClienteId)
             .SetData(venda.Data);
 
+        //1. Os items que foram apagados agora da venda
+        ExcluirItemVenda(venda, vendaDb);
+
         foreach (var itmNew in venda.Items)
         {
             var prod = await dbSetProduto.FindAsync(itmNew.ProdutoId) ??
                 throw new Exception($"Não foi achado o produto ({itmNew.ProdutoId})");
-            //1. Ja tinha o item, so atualiza a quantidade o preco e estoque (no produto)
+            
             if (itmNew.VendaItemId != default)
             {
-
-                var itmOld = vendaDb.Items.Where(itm => itm.VendaItemId == itmNew.VendaItemId).FirstOrDefault() ??
-                    throw new Exception($"O item ({itmNew.VendaItemId}) foi editado mas não foi achado no banco.");
-
-                prod.SetEstoque(prod.Estoque + itmOld.Quantidade - itmNew.Quantidade);
-
-                itmOld
-                    .SetQuantidade(itmNew.Quantidade)
-                    .SetPreco(itmNew.Preco);
-                //.SetProdutoId(itmNew.ProdutoId); //Regra Negocio: nao pode modificar o produto num item da venda
-
-                _dbContext.Entry(itmOld).State = EntityState.Modified;
-
-
-            }
-            //2. Item novo
+                //2. Ja tinha o item, so atualiza a quantidade o preco e estoque (no produto)
+                ModificarItemVenda(vendaDb, itmNew, prod);
+            }            
             else
             {
-                prod.SetEstoque(prod.Estoque - itmNew.Quantidade);
-
-                var item = new VendaItem(
-                    venda.VendaId,
-                    itmNew.ProdutoId,
-                    itmNew.Quantidade,
-                    itmNew.Preco);
-                _dbContext.Entry(item).State = EntityState.Added;
-
-                vendaDb.AddItem(item);
+                //3. Item novo
+                AdicionarItemVenda(venda, vendaDb, itmNew, prod);
             }
             _dbContext.Entry(prod).State = EntityState.Modified;
         }
 
-        //3. Os items velhos que agora estao excluidos da venda
-        var imtExcluir = vendaDb.Items.Except(venda.Items);
+        _dbContext.Entry(vendaDb).State = EntityState.Modified;
+        return vendaDb;
+    }
+
+    private void ExcluirItemVenda(Venda venda, Venda? vendaDb)
+    {
+        var imtExcluir = vendaDb?.Items.Except(venda.Items);
         imtExcluir?.ToList().ForEach(async (vi) =>
         {
             //Correge o estoque
@@ -197,29 +184,38 @@ public class VendaRepository : IVendaRepository
             //Marca para excluir o item da venda no banco
             _dbContext.Entry(vi).State = EntityState.Deleted;
         });
+    }
 
+    private void AdicionarItemVenda(Venda venda, Venda? vendaDb, VendaItem itmNew, Produto prod)
+    {
+        prod.SetEstoque(prod.Estoque - itmNew.Quantidade);
 
+        var item = new VendaItem(
+            venda.VendaId,
+            itmNew.ProdutoId,
+            itmNew.Quantidade,
+            itmNew.Preco);
+        //_dbContext.Entry(item).State = EntityState.Added;
 
-        //-----------
-        //foreach (var itm in imtExcluir)
-        //{
-        //    var prod = await dbSetProduto.FindAsync(itm.ProdutoId) ?? throw new Exception($"Não foi achado o produto ({itm.ProdutoId})");
-        //    prod.SetEstoque(prod.Estoque + itm.Quantidade);
-        //    _dbContext.Entry(itm).State = EntityState.Deleted;
-        //}
-        //---------------
-        //foreach (var itmOld in vendaDb.Items)
-        //{
-        //    var itmAtualizado = venda.Items.Where(itm => itm.VendaItemId == itmOld.VendaItemId).FirstOrDefault();
-        //    if (itmAtualizado is null)
-        //    {
-        //        var prod = await dbSetProduto.FindAsync(itmOld.ProdutoId) ?? throw new Exception($"Não foi achado o produto ({itmOld.ProdutoId})");
-        //        prod.SetEstoque(prod.Estoque + itmOld.Quantidade);
-        //        _dbContext.Entry(itmOld).State = EntityState.Deleted;
-        //    }
-        //}
+        vendaDb.AddItem(item);
+    }
 
-        _dbContext.Entry(vendaDb).State = EntityState.Modified;
-        return vendaDb;
+    private void ModificarItemVenda(Venda? vendaDb, VendaItem itmNew, Produto prod)
+    {
+        var itmOld = vendaDb.Items.Where(itm => itm.VendaItemId == itmNew.VendaItemId).FirstOrDefault() ??
+            throw new Exception($"O item ({itmNew.VendaItemId}) foi editado mas não foi achado no banco.");
+
+        //O estoque tmb corrige se for diferentes quantidades
+        if (itmOld.Quantidade != itmNew.Quantidade)
+        {
+            prod.SetEstoque(prod.Estoque + itmOld.Quantidade - itmNew.Quantidade);
+        }
+
+        itmOld
+            .SetQuantidade(itmNew.Quantidade)
+            .SetPreco(itmNew.Preco);
+        //.SetProdutoId(itmNew.ProdutoId); //Regra Negocio: nao pode modificar o produto num item da venda
+
+        _dbContext.Entry(itmOld).State = EntityState.Modified;
     }
 }

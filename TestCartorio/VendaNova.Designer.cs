@@ -167,7 +167,7 @@
             btn_venda_pagar.Name = "btn_venda_pagar";
             btn_venda_pagar.Size = new Size(75, 23);
             btn_venda_pagar.TabIndex = 12;
-            btn_venda_pagar.Text = "Gerar Venda";
+            btn_venda_pagar.Text = "Gravar Venda";
             btn_venda_pagar.UseVisualStyleBackColor = true;
             btn_venda_pagar.Click += btn_venda_pagar_Click;
             // 

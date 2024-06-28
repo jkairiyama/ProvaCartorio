@@ -2,6 +2,7 @@ using Domain.Data.Vendas;
 using MediatR;
 using Domain.Repositories.Vendas;
 using Domain.Data.Vendas.Entities;
+using Mapster;
 
 namespace AppCartorio.Vendas;
 
@@ -16,18 +17,9 @@ public class UpdateVendaCommandHandler : IRequestHandler<UpdateVendaCommand, Ven
 
     public async Task<Venda> Handle(UpdateVendaCommand request, CancellationToken cancellationToken)
     {
-        var vendaModificada = new Venda(clienteId: request.ClienteId, data: request.Data, vendaId: request.VendaId);
-        foreach (var itm in request.Items)
-        {
-            vendaModificada.AddItem(
-                new VendaItem(
-                    vendaItemid: itm.VendaItemId,
-                    vendaId: request.VendaId,
-                    produtoId: itm.ProdutoId,
-                    preco: itm.Preco,
-                    quantidade: itm.Quantidade)
-            );
-        }
+        TypeAdapterConfig.GlobalSettings.Default.MapToConstructor(true);//tinha um error (mapster): não tinha default contructor
+        var vendaModificada = request.Adapt<Venda>();
+        
 
         var venda = await _vendaRepository.Update(vendaModificada);
         await _vendaRepository.Save();
